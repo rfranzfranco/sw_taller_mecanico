@@ -30,15 +30,30 @@ $routes->setAutoRoute(false);
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
+
 $routes->get('/login', 'Auth::index', ['filter' => 'noauth']);
 $routes->post('/login', 'Auth::login');
-$routes->get('/home/prueba', 'Home::prueba');
+$routes->get('/logout', 'Auth::logout'); // Mover fuera del grupo o manejar filtro
 
-// Filter on route group for logged in user
-$routes->group('', ['filter'=>'auth'], function ($routes){
-    $routes->get('/logout', 'Auth::logout');
+// Rutas protegidas (Usuario logueado)
+$routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'Home::index');
-    $routes->get('/(:any)', 'Home::root/$1');
+
+    // --- Módulo de Reservas ---
+    $routes->get('/reservas/nueva', 'Reservas::crear');       // Formulario reservar
+    $routes->post('/reservas/guardar', 'Reservas::guardar');  // Guardar datos
+    $routes->get('/reservas/mis-reservas', 'Reservas::listarPorCliente');
+
+    // --- Módulo de Vehículos ---
+    $routes->get('/vehiculos', 'Vehiculos::index');
+    $routes->post('/vehiculos/agregar', 'Vehiculos::agregar');
+
+    // --- Módulo de Inventario (Solo Admin - podrías agregar otro filtro aquí) ---
+    $routes->get('/inventario', 'Inventario::index');
+    $routes->post('/inventario/actualizar', 'Inventario::update');
+
+    // --- Facturación ---
+    $routes->get('/facturacion', 'Facturas::index');
 });
 
 /*
