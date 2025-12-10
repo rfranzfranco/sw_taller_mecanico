@@ -40,13 +40,14 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'Home::index');
 
     // --- Módulo de Reservas ---
-    $routes->get('/reservas/nueva', 'Reservas::crear');       // Formulario reservar
-    $routes->post('/reservas/guardar', 'Reservas::guardar');  // Guardar datos
-    $routes->get('/reservas/mis-reservas', 'Reservas::listarPorCliente');
+    $routes->get('/reservas/nueva', 'Reservas::nueva');       // Vista formulario key matching view filename convention or controller method
+    $routes->post('/reservas/guardar', 'Reservas::guardar');
+    $routes->get('/reservas/mis-reservas', 'Reservas::misReservas'); // Updated to cleaner method name if likely
 
     // --- Módulo de Vehículos ---
     $routes->get('/vehiculos', 'Vehiculos::index');
-    $routes->post('/vehiculos/agregar', 'Vehiculos::agregar');
+    $routes->get('/vehiculos/crear', 'Vehiculos::crear');
+    $routes->post('/vehiculos/guardar', 'Vehiculos::guardar');
 
     // --- Módulo de Inventario (Solo Admin - podrías agregar otro filtro aquí) ---
     $routes->get('/inventario', 'Inventario::index');
